@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartSpend AI - Mindful Student Budgeting</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#eef2ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-indigo-600 p-2 rounded-xl text-white font-bold text-xl shadow-lg shadow-indigo-500/30">🧠💸</div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight">SmartSpend AI</h1>
+                    <p class="text-xs text-slate-400">In-the-Moment Student Mindfulness & Budget Assistant</p>
+                </div>
+            </div>
+            <div class="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800/60 px-3 py-1.5 rounded-full font-medium">
+                Sandbox Mode Active
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-5xl mx-auto px-4 py-8 flex-grow grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+
+        <!-- Left Column: Weekly Planner Overview -->
+        <div class="md:col-span-1 space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl">
+                <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4">Weekly Money Planner</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">Monthly Allowance / Budget</label>
+                        <input type="number" id="monthlyAllowance" value="12000" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">Calculated Weekly Limit</label>
+                        <div id="weeklyLimitDisplay" class="text-xl font-bold text-indigo-400">₹3,000 / wk</div>
+                    </div>
+                    <hr class="border-slate-800">
+                    <div>
+                        <div class="flex justify-between text-xs text-slate-400 mb-1">
+                            <span>Weekly Spent</span>
+                            <span id="spentDisplay" class="text-rose-400 font-semibold">₹850</span>
+                        </div>
+                        <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800">
+                            <div id="spendProgressBar" class="bg-indigo-500 h-2.5 rounded-full transition-all duration-300" style="width: 28%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-3">
+                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Mindfulness Score</h3>
+                <div class="flex items-center justify-between">
+                    <span class="text-2xl font-bold text-emerald-400">88%</span>
+                    <span class="text-xs bg-emerald-950 text-emerald-300 border border-emerald-800 px-2.5 py-1 rounded-lg">Mindful Spender</span>
+                </div>
+                <p class="text-xs text-slate-400">You paused and reflected on 5 out of 6 recent purchases before checkout.</p>
+            </div>
+        </div>
+
+        <!-- Right Column: In-the-Moment Purchase & AI Reflection -->
+        <div class="md:col-span-2 space-y-6">
+            
+            <!-- Purchase Interceptor Form -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <h2 class="text-base font-bold text-white mb-2">⚡ In-the-Moment Purchase Interceptor</h2>
+                <p class="text-xs text-slate-400 mb-5">Pause before paying! Enter your intended purchase to let SmartSpend AI run a behavioral introspection check.</p>
+
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs text-slate-400 block mb-1">Item / Description</label>
+                            <input type="text" id="itemName" placeholder="e.g., Cafe Latte & Pastry" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-400 block mb-1">Amount (₹)</label>
+                            <input type="number" id="itemAmount" placeholder="350" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">Classification (Want vs. Need vs. Goal)</label>
+                        <select id="itemCategory" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                            <option value="want">Want (Impulse / Entertainment)</option>
+                            <option value="need">Need (Groceries / Academic / Essentials)</option>
+                            <option value="goal">Goal (Long-term savings contribution)</option>
+                        </select>
+                    </div>
+
+                    <button onclick="runAIReflection()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 px-4 rounded-xl transition shadow-lg shadow-indigo-600/30 text-sm">
+                        Consult AI Mindfulness Coach
+                    </button>
+                </div>
+            </div>
+
+            <!-- AI Reflection Box -->
+            <div id="aiResponseBox" class="hidden bg-indigo-950/40 border border-indigo-800/50 rounded-2xl p-6 shadow-xl space-y-4">
+                <div class="flex items-center space-x-2 text-indigo-400">
+                    <span class="text-lg">🤖</span>
+                    <h3 class="font-bold text-sm tracking-wide uppercase">SmartSpend AI Behavioral Insight</h3>
+                </div>
+                <p id="aiFeedbackText" class="text-sm text-slate-200 leading-relaxed"></p>
+
+                <!-- Simulated PayPal Checkout Integration -->
+                <div class="pt-4 border-t border-indigo-900/60 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div class="text-xs text-slate-400">
+                        Ready to proceed via <span class="text-blue-400 font-semibold">PayPal Sandbox</span>?
+                    </div>
+                    <div class="flex space-x-3 w-full sm:w-auto">
+                        <button onclick="cancelPurchase()" class="flex-1 sm:flex-none px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium rounded-xl transition">
+                            Skip Purchase
+                        </button>
+                        <button onclick="simulatePayPalCheckout()" class="flex-1 sm:flex-none px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-xl shadow-md transition flex items-center justify-center space-x-1.5">
+                            <span>Pay with PayPal</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 py-4 text-center text-xs text-slate-500">
+        SmartSpend AI • Built with HTML, Tailwind CSS, JavaScript, and Gemini Prototyping
+    </footer>
+
+    <!-- Script Logic -->
+    <script>
+        let currentSpent = 850;
+        let weeklyLimit = 3000;
